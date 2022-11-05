@@ -68,7 +68,19 @@ router.post('/',
     talkers.push(newTalker);
     await writeNewTalker(talkers);
 
-    res.status(201).json(newTalker);
+    return res.status(201).json(newTalker);
+});
+
+router.delete('/:id',
+  authentication,
+  validateId,
+  async (req, res) => {
+    const id = Number(req.params.id);
+    const talkers = await getAllTalkers();
+    const filteredTalkers = talkers.filter((t) => t.id !== id);
+    await writeNewTalker(filteredTalkers);
+
+    return res.status(204).end();
 });
 
 module.exports = router;
