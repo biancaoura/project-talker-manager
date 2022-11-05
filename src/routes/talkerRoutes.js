@@ -7,6 +7,7 @@ const validateAge = require('../middlewares/validateAge');
 const validateTalk = require('../middlewares/validateTalk');
 const validateWatchedAt = require('../middlewares/validateWatchedAt');
 const validateRate = require('../middlewares/validateRate');
+const validateId = require('../middlewares/validateId');
 
 const router = express.Router();
 
@@ -26,6 +27,29 @@ router.get('/:id', async (req, res) => {
     return res.status(200).json(talker);
   }
   return res.status(404).json({ message: 'Pessoa palestrante não encontrada' });
+});
+
+router.put('/:id',
+  authentication,
+  validateId,
+  validateName,
+  validateAge,
+  validateTalk,
+  validateWatchedAt,
+  validateRate,
+  async (req, res) => {
+    const id = Number(req.params.id);
+    const talkers = await getAllTalkers();
+    const talker = talkers.find((t) => t.id === id);
+
+    const index = talkers.indexOf(talker);
+    const updatedTalker = { id, ...req.body };
+    console.log(updatedTalker);
+    
+    talkers.splice(index, 1, updatedTalker);
+    await writeNewTalker(talkers);
+    
+    return res.status(200).json(updatedTalker);
 });
 
 router.post('/',
