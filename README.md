@@ -2,7 +2,7 @@
 
 ## Goals
 
-### Develop a CRUD API to registrate speakers:
+### Develop a CRUD API to register speakers:
 
 - Create endpoints:
   - POST
